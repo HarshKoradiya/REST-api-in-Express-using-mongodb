@@ -29,11 +29,10 @@ mongoose.connect(process.env.CONNECTIONSTRING).then(
         })
         
         //Login api
-        app.get('/login',(req,res)=>{
-            const data = User.findOne({userEmail:req.body.userEmail,userPassword:req.body.userPassword})
-            const credentials = data['_conditions']
+        app.get('/login',async(req,res)=>{
+            const data = await User.findOne({userEmail:req.body.userEmail,userPassword:req.body.userPassword})
             if(data!=null && data != {}){
-                const token = jwt.sign(credentials,'1234')
+                const token = jwt.sign(data.toString(),'1234')
                 res.status(200).send(token)
             }
             else{
